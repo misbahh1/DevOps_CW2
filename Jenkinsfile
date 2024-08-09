@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
-        DOCKER_IMAGE = 'your-dockerhub-username/your-image-name'
+        DOCKER_IMAGE = 'misbah11/cw2'
         DOCKER_TAG = 'latest'
     }
 
@@ -48,8 +48,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    def kubectlCmd = 'kubectl apply -f deployment.yaml'
-                    sh kubectlCmd
+                    sh 'kubectl apply -f deployment.yaml'
                 }
             }
         }
@@ -58,6 +57,18 @@ pipeline {
     post {
         always {
             cleanWs()
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        unstable {
+            echo 'Pipeline marked as unstable!'
+        }
+        changed {
+            echo 'Pipeline result changed!'
         }
     }
 }

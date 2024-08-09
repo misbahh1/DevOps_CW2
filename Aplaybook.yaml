@@ -1,0 +1,27 @@
+---
+- hosts: production_server
+  become: yes
+  tasks:
+    - name: Install kubectl
+      apt:
+        name: kubectl
+        state: present
+
+    - name: Install Minikube
+      apt:
+        name: minikube
+        state: present
+
+    - name: Start Minikube
+      command: minikube start
+
+    - name: Deploy Docker Image
+      shell: kubectl run your-app --image=your_dockerhub_username/your_image_name:tag
+
+    - name: Create Service
+      shell: kubectl expose deployment your-app --type=LoadBalancer --port=8080
+
+    - name: Scale Deployment
+      shell: kubectl scale deployment your-app --replicas=3
+
+
